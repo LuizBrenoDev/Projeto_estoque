@@ -44,13 +44,55 @@ public class DAOProductJDBC implements DAOProduct{
     }
 
     @Override
-    public void update(Product p) {
+    public void updateQuantity(Integer quantity, Integer id) {
+        PreparedStatement ps = null;
+        try{
+           ps = c.prepareStatement(
+                  "update products " +
+                          "set quantity = quantity - ? " +
+                          "where " +
+                          "idProduct = ?"
+           );
+           ps.setInt(1,quantity);
+           ps.setInt(2,id);
 
+           int rows = ps.executeUpdate();
+
+           if(rows > 0){
+               System.out.println(rows);
+           }else{
+           System.out.println("ERROR");
+           }
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }finally{
+            DBConnector.closeStatement(ps);
+        }
     }
 
     @Override
     public void remove(Integer id) {
+        PreparedStatement ps = null;
+        try{
+            ps = c.prepareStatement(
+                    "delete from products " +
+                            "where idProduct  = ?"
+            );
 
+            ps.setInt(1,id);
+
+            int rows  = ps.executeUpdate();
+
+            if(rows > 0){
+                System.out.println(rows);
+            }else{
+                System.out.println("ERROR");
+            }
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }finally{
+            DBConnector.closeStatement(ps);
+        }
     }
 
     @Override
