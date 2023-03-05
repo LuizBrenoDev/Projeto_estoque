@@ -61,7 +61,7 @@ public class DAOProductJDBC implements DAOProduct{
            if(rows > 0){
                System.out.println(rows);
            }else{
-           System.out.println("ERROR");
+           System.out.println("Unexpected error occurred");
            }
         }catch(Exception e){
             throw new RuntimeException(e.getMessage());
@@ -69,6 +69,63 @@ public class DAOProductJDBC implements DAOProduct{
             DBConnector.closeStatement(ps);
         }
     }
+
+    @Override
+    public void increasePrice(Double amount, Integer id) {
+
+        PreparedStatement ps = null;
+        try{
+            ps = c.prepareStatement(
+                    "update products " +
+                            "set price = price + ? " +
+                            "where " +
+                            "IdProduct = ?"
+            );
+            ps.setDouble(1,amount);
+            ps.setInt(2,id);
+
+            int rows = ps.executeUpdate();
+
+            if(rows > 0){
+                System.out.println(rows);
+            }else{
+                System.out.println("Unexpected error occurred");
+            }
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }finally{
+            DBConnector.closeStatement(ps);
+        }
+    }
+
+    @Override
+    public void decreasePrice(Double amount, Integer id) {
+        PreparedStatement ps = null;
+        try{
+            ps = c.prepareStatement(
+                    "update products " +
+                            "set price = price - ? " +
+                            "where " +
+                            "IdProduct = ?"
+            );
+            ps.setDouble(1,amount);
+            ps.setInt(2,id);
+
+            int rows = ps.executeUpdate();
+
+            if(rows > 0){
+                System.out.println(rows);
+            }else{
+                System.out.println("Unexpected error occurred");
+            }
+
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }finally{
+            DBConnector.closeStatement(ps);
+        }
+    }
+
 
     @Override
     public void remove(Integer id) {
